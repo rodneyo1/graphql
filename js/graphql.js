@@ -2,15 +2,25 @@
 
 // Function to execute GraphQL queries
 async function executeQuery(query, variables = {}) {
-    const token = checkAuth();
-    const domain = 'learn.zone01kisumu.ke';
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'login.html';
+        throw new Error('Not authenticated');
+    }
+    
+    // Clean the token (remove any quotes or whitespace)
+    const cleanToken = token.replace(/^"|"$/g, '').trim();
+    
+    // Get domain and endpoint from API_CONFIG if available, otherwise use defaults
+    const domain = typeof API_CONFIG !== 'undefined' ? API_CONFIG.domain : 'learn.zone01kisumu.ke';
+    const graphqlEndpoint = typeof API_CONFIG !== 'undefined' ? API_CONFIG.graphqlEndpoint : '/api/graphql-engine/v1/graphql';
     
     try {
-        const response = await fetch(`https://${domain}/api/graphql-engine/v1/graphql`, {
+        const response = await fetch(`https://${domain}${graphqlEndpoint}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${cleanToken}`
             },
             body: JSON.stringify({
                 query,
@@ -19,12 +29,15 @@ async function executeQuery(query, variables = {}) {
         });
         
         if (!response.ok) {
-            throw new Error('GraphQL query failed');
+            const errorText = await response.text();
+            console.error('GraphQL response error:', errorText);
+            throw new Error(`GraphQL query failed: ${response.status} ${response.statusText}`);
         }
         
         const data = await response.json();
         
         if (data.errors) {
+            console.error('GraphQL errors:', data.errors);
             throw new Error(data.errors[0].message);
         }
         
@@ -42,6 +55,9 @@ async function getUserInfo() {
       user {
         id
         login
+        email
+        firstName
+        lastName
       }
     }
     `;
@@ -53,7 +69,7 @@ async function getUserInfo() {
 async function getUserXP() {
     const query = `
     {
-      transaction(where: {type: {_eq: "xp"}}, order_by: {createdAt: asc}) {
+      transaction(where: {type: {_eq: "xp"}, _and: [{eventId: {_eq: 75} }] }, order_by: {createdAt: asc}) {
         id
         amount
         createdAt
@@ -102,8 +118,8 @@ async function getUserResults() {
 // Query to get object details by ID
 async function getObjectDetails(objectId) {
     const query = `
-    {
-      object(where: {id: {_eq: ${objectId}}}) {
+    query GetObject($id: Int!) {
+      object(where: {id: {_eq: $id}}) {
         id
         name
         type
@@ -111,5 +127,5 @@ async function getObjectDetails(objectId) {
     }
     `;
     
-    return executeQuery(query);
+    return executeQuery(query, { id: objectId });
 }
