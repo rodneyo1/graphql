@@ -2,6 +2,10 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* font-smoothing: antialiased; */
 }
 
 body {
@@ -9,12 +13,13 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: #f4f4f4;
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
 }
 
 header {
@@ -22,6 +27,7 @@ header {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
+    backface-visibility: hidden; /* Helps with rendering performance */
 }
 
 .btn {
@@ -32,6 +38,9 @@ header {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .btn:hover {
@@ -41,9 +50,10 @@ header {
 .card {
     background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.2);
     padding: 20px;
     margin-bottom: 20px;
+    transform: translateZ(0); /* Improves rendering */
 }
 
 .profile-info {
@@ -59,25 +69,56 @@ header {
 
 .graph-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(50%, 2fr));
     gap: 20px;
     margin-top: 20px;
 }
 
 .graph-card {
-    background: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    backface-visibility: hidden;
 }
 
 .graph {
     height: 300px;
     width: 100%;
+    flex-grow: 1;
+    min-height: 0;
+    shape-rendering: crispEdges; /* For SVG elements */
 }
 
 .error-message {
     color: #d93025;
     margin-bottom: 15px;
     display: none;
+    text-shadow: 0 0 1px rgba(0,0,0,0.1); /* Improves readability */
+}
+
+h2 {
+    color: #4285f4;
+    margin: 10px;
+    font-weight: 600;
+    letter-spacing: -0.3px; /* Slightly tighter letter spacing */
+}
+
+/* Additional improvements for text elements */
+p, span, a, li {
+    text-shadow: 0 0 1px rgba(0,0,0,0.05);
+}
+
+/* For SVG elements (if your graphs use SVG) */
+svg {
+    shape-rendering: geometricPrecision;
+}
+
+/* Improve input fields */
+input, textarea, select {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
