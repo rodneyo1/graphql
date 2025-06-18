@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile - GraphQL</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- Load config.js first -->
+    <script src="js/config.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>My Profile</h1>
+            <h1 id ="username">My Profile</h1>
             <button id="logout-btn" class="btn">Logout</button>
         </header>
         
@@ -45,6 +47,7 @@
         </div>
     </div>
     
+    <!-- Load other scripts after config.js -->
     <script src="js/auth.js"></script>
     <script src="js/graphql.js"></script>
     <script src="js/graphs.js"></script>
