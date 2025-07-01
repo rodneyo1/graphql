@@ -85,14 +85,16 @@ async function getUserXP() {
 async function getUserProgress() {
     const query = `
     {
-      progress {
-        id
-        objectId
-        grade
-        createdAt
-        path
-      }
-    }
+            progress(where: {eventId: {_eq: 75}}) {
+                id
+                userId
+                objectId
+                grade
+                createdAt
+                updatedAt
+                path
+            }
+        }
     `;
     
     return executeQuery(query);
@@ -129,3 +131,4 @@ async function getObjectDetails(objectId) {
     
     return executeQuery(query, { id: objectId });
 }
+
