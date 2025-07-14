@@ -204,8 +204,8 @@ function generateProjectRatioGraph(data) {
     }
     
     const results = data.results;
-    const passCount = results.filter(result => result.grade > 0).length;
-    const failCount = results.filter(result => result.grade === 0).length;
+    const passCount = results.filter(result => result.grade > 1).length;
+    const failCount = results.filter(result => result.grade <= 1).length;
     
     // Calculate angles for pie slices
     const total = passCount + failCount;
