@@ -100,18 +100,36 @@ async function getUserProgress() {
     return executeQuery(query);
 }
 
+async function getUserProjectResults() {
+    const query = `
+    {
+        result(where: {eventId: {_eq: 75}}) {
+            id
+            type
+            grade
+            objectId
+        }
+    }
+    `;
+    
+    return executeQuery(query);
+}
+
 // Query to get user results
 async function getUserResults() {
     const query = `
     {
-      result {
-        id
-        objectId
-        grade
-        createdAt
-        path
-      }
-    }
+            result  (where: {eventId: {_eq: 75}}) {
+                id
+                objectId
+                userId
+                grade
+                type
+                createdAt
+                updatedAt
+                path
+            }
+        }
     `;
     
     return executeQuery(query);
