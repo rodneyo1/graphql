@@ -81,7 +81,8 @@ async function loadProgressData() {
     try {
         // First try to get progress data
         let progressData = await getUserProgress();
-    
+        progressData.progress = progressData.progress.filter(p => p.path !== "/kisumu/module");
+
         console.log("Progress data received:", progressData);
         
         // Then try to get results data
